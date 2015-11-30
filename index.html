@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>NodeWebkit Window Controls Example</title>
+    <link rel='stylesheet' href='reset.css'>
+    <link rel='stylesheet' href='style.css'>
+     <link rel="stylesheet" href="stylesheets/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <script src="scripts/jquery.min.js"></script>
+    <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="stylesheets/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+    
+   <!-- <script src="html.js"></script>-->
+<!--     <script src="mp3.js"></script>-->
+    <script src="angular_script.js"></script>
+    
+</head>
+<body  ng-app="MusicPlayer">
+    <div >
+    <header>
+        <ul>
+            <li><a href='#' title='Minimize' id='windowControlMinimize'></a></li><!--
+         --><li><a href='#' title='Maximize' id='windowControlMaximize'></a></li><!--
+         --><li><a href='#' title='Close'    id='windowControlClose'   ></a></li>
+            </ul>
+    </header>
+         </div>
+        
+        <div ng-view>
+
+    </div>
+
+       
+    </body>
+   
+</html>

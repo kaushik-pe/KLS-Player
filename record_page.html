@@ -1,0 +1,198 @@
+<script src="dygraph-combined-dev.js"></script>
+<script>
+    var fs = require('fs');
+    var chart;
+    var data = new google.visualization.DataTable();
+    var graph_file = 'file.txt';
+    var g = "default";
+    var start;
+    var limit1,limit2;
+    function zoomer()
+    {
+        var a = g.xAxisRange(); 
+        var x_extremes = a.toString().split(',');
+        var range = x_extremes[1]-x_extremes[0];
+        var start_file_no = parseInt(x_extremes[0]/100);
+        var last_file_no  = parseInt(x_extremes[1]/100);
+        var start_index = (x_extremes[0]%100)/100*88200;
+        var last_index =(x_extremes[1]%100)/100*88200;
+        var iterator = ((range*882)-start_index-last_index)/2000; 
+        var all_samples = [];
+        var graph_text;
+        limit1 = x_extremes[0];
+        limit2 = x_extremes[1];
+        alert(x_extremes[0]+" "+x_extremes[1]);
+        for(var i=start_file_no;i<=last_file_no;i++)
+        {
+          var file_name = "aud/all_samples"+(i+1)+".txt";
+          var data = fs.readFileSync(file_name);
+          var arr = data.toString().split('\n');
+          if(i==start_file_no)
+              var sec = start_index;
+          else if(i==last_file_no)
+              var sec = last_index;
+          else
+               var sec = 0;
+            
+          for(j=sec;j<arr.length;j+=iterator)
+               all_samples.push(arr[parseInt(j)]);
+          
+        
+        }
+        for(i=0;i<all_samples.length;i++)
+        {
+           graph_text+=i+","+all_samples[i]+"\n";
+        }   
+       
+         g = new Dygraph(
+        // containing div
+            document.getElementById("curve_chart"),
+            graph_text,
+            {
+                
+            }
+        );
+        console.clear();
+    
+    
+    }
+    function dispgraph(x,y)
+    {
+        
+       
+        
+        if(g!="default")
+        {
+            g.destroy();
+        }
+        else
+        {
+            start = new Date();   
+        }
+        var data = fs.readFileSync('file.txt');
+        var arr = data.toString().split('\n');
+        var str = "Frame,Amplitude\n";
+        var cur = new Date();
+        var time_str;
+        for(i=0;i<arr.length;i++)
+        {
+            str+=i+","+arr[i]+"\n";
+        }
+         g = new Dygraph(
+
+    // containing div
+    document.getElementById("curve_chart"),
+    str,
+    {
+        zoomCallback:zoomer
+    }
+  );    
+       var max=0,max_index,min=1,min_index=0;
+       if(x||y)
+        {
+            x = parseInt(x);
+            y = parseInt(y);   
+            alert(x+" "+y);
+            for(var k=x;k<=y;k++)
+            {
+                if(arr[k]>max)
+                {
+                   max = arr[k];
+                   max_index = k; 
+                }
+                console.log(arr[k]+" "+min+" "+String(arr[k]<min));
+                if(parseFloat(arr[k])<parseFloat(min))
+                {
+                   min = arr[k];
+                   min_index = k;
+                    
+                }
+
+             }
+            g.ready(function() {
+                    g.setAnnotations([
+                    {
+                      series: "Amplitude",
+                      x: max_index,
+                      shortText: "H",
+                      text: "Maximum Amplitude"
+                    },
+                    {
+                      series: "Amplitude",
+                      x: min_index,
+                      shortText: "L",
+                      text: "Minimum Amplitude"
+                    }
+                    ]);
+            });
+        }
+    
+    }
+  
+    function revert_graph()
+    {
+        dispgraph(limit1,limit2);
+        
+    }
+    
+</script>
+
+
+     <div class='col-xs-1' style="margin-top:5%">
+         <button class="btn btn-info" ng-click="record()" ><span class="glyphicon glyphicon-record"></span></button>&nbsp;&nbsp;</br></br>
+     </div>
+    <div class='col-xs-10' style="margin-top:5%">
+                            </br>
+                                                     
+                                {{time_str}}
+                             <div id="slider-2" onclick="move_song()" ondrag="drag_change_timer()"></div>
+                         
+                    </br>
+           <center>
+                    <div id="button-tray">
+                         <button class="btn btn-info" ng-click="record()" ><span class="glyphicon glyphicon-record"></span></button>&nbsp;&nbsp;
+                        <button class="btn btn-info" ng-click='pause()'><span class="glyphicon glyphicon-pause"></span></button>&nbsp;&nbsp;
+                       
+                       
+                    </div>
+            </center></br></br>
+            <center>
+             <div id="curve_chart" ondblclick="revert_graph()" style="background-color: #ffffff" >               </div>
+            </center>
+        </div>
+    <div class='col-xs-1' style="margin-top:5%">
+
+    </div>
+  <script>
+        var nw = require('nw.gui');
+        var win = nw.Window.get(); 
+        
+        // Min
+        document.getElementById('windowControlMinimize').onclick = function()
+        {
+            win.minimize();
+        };
+
+        // Close
+        document.getElementById('windowControlClose').onclick = function()
+        {
+            win.close();
+        };
+
+        // Max
+        document.getElementById('windowControlMaximize').onclick = function()
+        {
+            if (win.isMaximized)
+                win.unmaximize();
+            else
+                win.maximize();
+        };
+
+        win.on('maximize', function(){
+            win.isMaximized = true;
+        });
+
+        win.on('unmaximize', function(){
+            win.isMaximized = false;
+        });
+     </script>

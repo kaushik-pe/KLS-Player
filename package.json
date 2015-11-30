@@ -1,0 +1,11 @@
+{
+    "main": "index.html",
+    "name": "KLS Player",
+    "window":
+    {
+
+        "frame"   : false,
+        "min_width": 640,
+        "min_height": 480
+    }
+}

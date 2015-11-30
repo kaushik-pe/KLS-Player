@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>jQuery UI Slider functionality</title>
+      <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+      <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      <!-- Javascript -->
+      <script>
+         $(function() {
+            $( "#slider-2" ).slider({
+               value: 60,
+               animate:"slow",
+               orientation: "horizontal"
+            });
+         });
+      </script>
+   </head>
+   <body>
+      <!-- HTML --> 
+      <div id="slider-2"></div>
+   </body>
+</html>
